@@ -9,7 +9,7 @@ interface ItemFeedDAO {
     fun insertItemFeeds(vararg itemFeeds: ItemFeed)
 
     @Update
-    fun updateItemFeeds(vararg itemFeeds : ItemFeed)
+    fun updateItemFeeds(vararg itemFeeds: ItemFeed)
 
     @Query("SELECT * FROM item_feeds")
     fun getAllItemFeeds(): List<ItemFeed>

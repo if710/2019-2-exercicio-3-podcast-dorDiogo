@@ -4,7 +4,6 @@ import android.app.IntentService
 import android.content.Intent
 import android.os.Environment
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import java.io.BufferedOutputStream
@@ -18,7 +17,6 @@ import java.net.URL
 class EpisodeDownloadService : IntentService("EpisodeDownloadService") {
 
     public override fun onHandleIntent(i: Intent?) {
-        Log.d("borave", "comecou")
         try {
             val root = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
             root?.mkdirs()
@@ -48,22 +46,15 @@ class EpisodeDownloadService : IntentService("EpisodeDownloadService") {
 
             val itemFeedDAO = ItemFeedDB.getDatabase(applicationContext).ItemFeedDAO()
             val itemFeed = itemFeedDAO.getItemFeed(url.toString())
-            itemFeed.downloadPath = output.path
-            Log.d("borave", itemFeed.downloadPath)
+            itemFeed.filePath = output.path
             itemFeedDAO.updateItemFeeds(itemFeed)
 
-            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(DOWNLOAD_COMPLETE))
+            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(MainActivity.ITEM_UPDATED))
 
 
         } catch (e2: IOException) {
             Log.e(javaClass.name, "Exception durante download", e2)
         }
-        Log.d("borave", "terminou")
 
-    }
-
-    companion object {
-
-        val DOWNLOAD_COMPLETE = "br.ufpe.cin.android.services.action.DOWNLOAD_COMPLETE"
     }
 }

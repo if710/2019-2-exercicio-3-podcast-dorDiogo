@@ -1,6 +1,5 @@
 package br.ufpe.cin.android.podcast
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -13,7 +12,7 @@ import java.io.File
 
 class xmlDataViewAdapter(
     private val itemFeeds: List<ItemFeed>,
-    private val applicationContext: Context
+    private val podcastPlayerService: PodcastPlayerService?
 ) :
     RecyclerView.Adapter<xmlDataViewAdapter.ViewHolder>() {
 
@@ -52,14 +51,25 @@ class xmlDataViewAdapter(
         holder.item_date.text = itemFeed.pubDate
         holder.item_guid = itemFeed.downloadLink
 
+        holder.item_play_button.setOnClickListener {
+            podcastPlayerService?.togglePlayback(itemFeed)
+        }
+
+        if (itemFeed.isPlaying) {
+            holder.item_play_button.setBackgroundResource(R.drawable.pause)
+        } else {
+            holder.item_play_button.setBackgroundResource(R.drawable.play)
+        }
+
         holder.item_play_button.visibility =
-            if (itemFeed.downloadPath != null && File(itemFeed.downloadPath).exists()) View.VISIBLE else View.GONE
+            if (itemFeed.filePath != null && File(itemFeed.filePath!!).exists()) View.VISIBLE else View.GONE
 
         holder.item_action.setOnClickListener {
             val intent = Intent(holder.item_context, EpisodeDownloadService::class.java)
             intent.data = Uri.parse(itemFeed.link)
             holder.item_context.startService(intent)
         }
+
     }
 
     override fun getItemCount() = itemFeeds.size

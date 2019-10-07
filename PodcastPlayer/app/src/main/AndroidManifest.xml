@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <service android:name=".EpisodeDownloadService" />
+        <service android:name=".PodcastPlayerService" />
     </application>
 
 </manifest>

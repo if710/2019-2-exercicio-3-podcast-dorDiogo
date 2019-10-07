@@ -11,7 +11,9 @@ data class ItemFeed(
     val description: String,
     @PrimaryKey val downloadLink: String,
     val imageLink: String,
-    var downloadPath: String? = null
+    var filePath: String? = null,
+    var playbackPosition: Int = 0,
+    var isPlaying: Boolean = false
 ) {
 
     override fun toString(): String {
